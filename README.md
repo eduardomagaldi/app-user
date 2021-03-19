@@ -3,6 +3,10 @@ Author: Eduardo Magaldi
 
 Simple web app (backend and frontend), which allows the user to register, login and logout using REST API calls on the backend.
 
+## Before running
+
+Please install [Node.js](https://nodejs.org/en/)
+
 ## How to run
 
 ### Running Full App for Production
