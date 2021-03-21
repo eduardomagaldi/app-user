@@ -6,9 +6,15 @@
 	border-radius: 100px;
 	padding: $spacing;
 	background-color: transparent;
+	transition: background-color .3s;
+	cursor: pointer;
+
+	&:hover {
+		background-color: lighten($colorPrimary, 30);
+	}
 }
 
-.button--change_face {
+.button--nav {
 	padding-right: 60px;
 }
 
@@ -16,4 +22,13 @@
 	color: white;
 	background: $colorPrimary;
 	border: 1px solid $colorPrimary;
+
+	&:hover {
+		background-color: lighten($colorPrimary, 8);
+	}
+}
+
+.button--block {
+	display: block;
+	width: 100%;
 }

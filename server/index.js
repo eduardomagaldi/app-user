@@ -6,7 +6,6 @@ const https = require('https');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const app = express();
-// const { Issuer, generators, custom } = require('openid-client');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 // const NodeRSA = require('node-rsa');
@@ -26,38 +25,37 @@ let options = {
     cert: fs.readFileSync(path.join(__dirname, '../certificates', 'RootCA.pem')),
 };
 
-// if (process.env.URL) {
-// 	options = {
-// 		key: fs.readFileSync(path.join('/etc/letsencrypt/live/portal.llac.adv.br', 'privkey.pem')),
-// 		cert: fs.readFileSync(path.join('/etc/letsencrypt/live/portal.llac.adv.br', 'fullchain.pem')),
-// 	};
-// }
-
-// process.env.URL = process.env.URL || 'localhost:8081';
-
 app.use(helmet());
 app.use(bodyParser.json());
 
-if (!process.env.PRODUCTION) {
-    app.use(
-        cors({
-            origin: 'https://' + process.env.URL,
-            credentials: true,
-            exposedHeaders: 'Location',
-            optionsSuccessStatus: 200,
-        }),
-    );
-}
+// if (!process.env.PRODUCTION) {
+app.use(
+    cors({
+        origin: 'https://' + process.env.URL,
+        credentials: true,
+        exposedHeaders: 'Location',
+        optionsSuccessStatus: 200,
+    }),
+);
+// }
 
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://' + process.env.URL);
+    res.header('Access-Control-Allow-Origin', '*');
+    res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     next();
 });
 
-// let client;
-// let code_verifier;
+// GET    /session/new gets the webpage that has the login form
+// POST   /session authenticates credentials against database
+// DELETE /session destroys session and redirect to /
+// GET  /users/new gets the webpage that has the registration form
+// POST /users records the entered information into database as a new /user/xxx
+// GET  /users/xxx // gets and renders current user data in a profile view
+// POST /users/xxx // updates new information about user
+
+
 let authorizationUrl = '/auth';
 
 // let googleIssuer;
@@ -90,9 +88,9 @@ let authorizationUrl = '/auth';
 //     });
 // })();
 
-app.use(express.static('dist'));
+app.use(express.static('build'));
 
-app.get('/api/login', async function (req, res) {
+app.post('/api/session', async function (req, res) {
     const params = client.callbackParams(req);
 
     console.time('client.callback');
@@ -127,8 +125,11 @@ app.get('/api/login', async function (req, res) {
     }
 });
 
+// console.log('apo');
+
 app.get('/api', async function (req, res) {
-    res.json(process.env.URL);
+    console.log('api');
+    res.json('jsonsao');
 });
 
 app.post('/api/logout', auth, async function (req, res) {
@@ -157,11 +158,11 @@ app.post('/api/logout', auth, async function (req, res) {
 // //////////
 // all
 // //////////
-app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
+// app.get('*', function (req, res) {
+//     res.sendFile(path.join(__dirname, '../build', 'index.html'));
+// });
 
-https.createServer(options, app).listen(8080);
+https.createServer(options, app).listen(1313);
 
 async function auth(req, res, next) {
     if (!req.cookies.id_token) {

@@ -138,12 +138,12 @@ export default function Component() {
 									</div>
 								</Field>
 
-								<Button className="button--filled" type="submit">REGISTER</Button>
+								<Button className="button--filled button--block" type="submit">REGISTER</Button>
 							</form>
 
 							<div className="wrapper_nav">
-								<Button onClick={showSignup} className="blaaaaaaa">
-									LOGIN ->
+								<Button onClick={showSignup} className="button--nav">
+									LOGIN
 								</Button>
 							</div>
 
@@ -207,8 +207,8 @@ export default function Component() {
 							2
 
 							<div className="wrapper_nav wrapper_nav--left">
-								<Button onClick={showLogin}>
-									<span>&amp;<span>-</span></span> Register
+								<Button className="button--block" onClick={showLogin}>
+									REGISTER.....
 								</Button>
 							</div>
 						</div>

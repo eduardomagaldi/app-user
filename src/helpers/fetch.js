@@ -1,7 +1,7 @@
 let apiUrl = 'https://' + window.location.host;
 
 if (window.location.host.indexOf('localhost') > -1) {
-    apiUrl = 'https://localhost:8080';
+    apiUrl = 'https://localhost:1313';
 }
 
 const fetchObj = {

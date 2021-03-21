@@ -60,6 +60,11 @@
 	bottom: $spacing;
 	right: -40px;
 
+	.button {
+		padding: $spacing / 2 $spacing;
+		padding-right: 50px;
+	}
+
 	&.wrapper_nav--left {
 		right: auto;
 		left: -40px;
