@@ -1,0 +1,15 @@
+@import "./css/_variables";
+
+body,
+html,
+#root {
+	min-height: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#root {
+	font-family: 'Dosis', sans-serif;
+	color: $colorPrimary;
+}
+

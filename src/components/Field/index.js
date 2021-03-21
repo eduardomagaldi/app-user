@@ -2,7 +2,7 @@ import './style.scss';
 
 export default function Component({ children }) {
 	return (
-		<div className="box">
+		<div className="field">
 			{children}
 		</div>
 	);
