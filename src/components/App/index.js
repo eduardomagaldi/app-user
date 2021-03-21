@@ -1,5 +1,6 @@
 import './style.scss';
 import Box from './../Box';
+import Button from './../Button';
 import IconLock from '../IconLock';
 import IconEnvelope from '../IconEnvelope';
 import Field from './../Field';
@@ -74,12 +75,6 @@ export default function Component() {
 
 	return (
 		<div className="app">
-			{/* <Box>
-				<Field>
-					<input className="input" type="text" />
-					<IconUser className="mr-2" />
-				</Field>
-			</Box> */}
 
 			<ul className="nav">
 				<li onClick={showLogin}>1</li>
@@ -113,8 +108,20 @@ export default function Component() {
 					<div className="face face-front">
 						<div className="content">
 
-							<IconLock />
-							<IconEnvelope />
+							<Field>
+								<input className="input" type="text" />
+								<IconEnvelope className="mr-2" />
+							</Field>
+
+							<Field>
+								<input className="input" type="text" />
+								<IconLock className="mr-2" />
+							</Field>
+
+							<Button>
+								Login ->
+							</Button>
+
 
 
 							{/* <h2>Sign in</h2>

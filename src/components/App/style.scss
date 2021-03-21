@@ -1,3 +1,5 @@
+@import "../../css/_variables";
+
 .app {
 	background: #b7f4ff;
 	background: linear-gradient(180deg, #b7f4ff 0%, #fff6b8 100%);
@@ -31,12 +33,12 @@
 
 
 
-.content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 400px;
-}
+// .content {
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: center;
+// 	min-height: 400px;
+// }
 
 
 
@@ -62,7 +64,7 @@
 $prism-height: 450px;
 $prism-length: 350px;
 $prism-depth: $prism-length;
-$spacing: 20px;
+
 $br: 3px;
 
 // Colors
@@ -103,20 +105,29 @@ $green: #18567a;
 	transition: transform 0.5s ease-in;
 }
 
+.button {
+	align-self: flex-end;
+    margin-right: -43px;
+}
+
 .face {
 	position: absolute;
 	width: $prism-length;
 	height: $prism-height;
-	padding: $spacing;
+	// padding: $spacing;
 	background: white;
 	border: 3px solid $green;
 	border-radius: 3px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	overflow: hidden;
 
 	.content {
 		color: $text-dark;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
 
 		h2 {
 			font-size: 1.2em;
