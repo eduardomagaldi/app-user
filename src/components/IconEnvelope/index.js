@@ -2,10 +2,10 @@ import './style.scss';
 import tab from './tab.svg';
 import tabBack from './tab-back.svg';
 
-export default function Component({ children }) {
+export default function Component({ className }) {
 	return (
 		<>
-			<span className="envelope">
+			<span className={`envelope ${className}`}>
 				<img className="tab tab--folded" src={tab} alt="" />
 				{/* <img className="tab" src={tab} alt="" /> */}
 				<img className="tab tab--back" src={tabBack} alt="" />

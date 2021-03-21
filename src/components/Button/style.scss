@@ -1,7 +1,19 @@
 @import "../../css/_variables";
 
 .button {
-	background: orange;
+	color: $colorPrimary;
+	border: 1px solid $colorPrimary;
 	border-radius: 100px;
 	padding: $spacing;
+	background-color: transparent;
+}
+
+.button--change_face {
+	padding-right: 60px;
+}
+
+.button--filled {
+	color: white;
+	background: $colorPrimary;
+	border: 1px solid $colorPrimary;
 }

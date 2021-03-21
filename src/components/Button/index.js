@@ -1,9 +1,10 @@
 import './style.scss';
 
-export default function Component({ children }) {
+export default function Component({ children, className, onClick, type }) {
+
 	return (
-		<div className="button">
+		<button className={`button button--change_face ${className}`} onClick={onClick} type={type}>
 			{children}
-		</div>
+		</button>
 	);
 }
