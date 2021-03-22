@@ -48,20 +48,25 @@ app.use(express.static('build'));
 
 // create new user
 app.post('/api/v1/user', async function (req, res) {
-    const tokenSet = true;
-    if (tokenSet) {
-        const now = new Date().getTime();
-        const dayInMillisec = 24 * 60 * 60 * 1000;
-        const expire = new Date(now + dayInMillisec);
-        const options = 'Secure; Path=/; HttpOnly';
+    // TODO some validation/sanitization for security resons
+    const dataUser = { ...req.body };
 
-        if (tokenSet.id_token) {
-            res.header('Set-Cookie', 'id_token=' + tokenSet.id_token + '; Expires=' + expire + '; ' + options);
+    res.json(dataUser);
+
+    const result = await db.insert(
+        'users',
+        Object.keys(dataUser),
+        [dataUser],
+    );
+
+    if (result) {
+        if (result.error) {
+            res.json(result.error);
+        } else {
+            res.json(result);
         }
-
-        res.json(true);
     } else {
-        res.redirect(401, authorizationUrl);
+        //TO DO validation/error handling
     }
 });
 
@@ -86,7 +91,7 @@ app.post('/api/v1/session', async function (req, res) {
 
 // logout
 app.delete('/api/v1/session', auth, async function (req, res) {
-
+    res.json(true);
 });
 
 https.createServer(options, app).listen(1313);
