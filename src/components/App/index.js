@@ -21,7 +21,7 @@ export default function Component() {
 
 		console.log('fetch', fetch);
 
-		const data = await fetch.get('/api/login');
+		const data = await fetch.post('/api/v1/user');
 		console.log('data', data);
 	}
 

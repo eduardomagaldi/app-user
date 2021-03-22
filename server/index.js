@@ -27,80 +27,28 @@ let options = {
 
 app.use(helmet());
 app.use(bodyParser.json());
-
-// if (!process.env.PRODUCTION) {
+app.use(cookieParser());
 app.use(
     cors({
-        origin: 'https://' + process.env.URL,
+        origin: 'http://localhost:3000',
         credentials: true,
         exposedHeaders: 'Location',
         optionsSuccessStatus: 200,
     }),
 );
-// }
-
-app.use(cookieParser());
-
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     next();
 });
 
-// GET    /session/new gets the webpage that has the login form
-// POST   /session authenticates credentials against database
-// DELETE /session destroys session and redirect to /
-// GET  /users/new gets the webpage that has the registration form
-// POST /users records the entered information into database as a new /user/xxx
-// GET  /users/xxx // gets and renders current user data in a profile view
-// POST /users/xxx // updates new information about user
-
-
 let authorizationUrl = '/auth';
-
-// let googleIssuer;
-
-// (async function () {
-//     googleIssuer = await Issuer.discover('https://accounts.google.com');
-
-//     process.env.GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '659062205417-8knkjqi725qqnchfl6knhn05uv5ms4dp.apps.googleusercontent.com';
-//     process.env.GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '-oJ-hUYjZwL299vkfqHwU9MO';
-
-//     client = new googleIssuer.Client({
-//         client_id: process.env.GOOGLE_CLIENT_ID,
-//         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-//         redirect_uris: ['https://' + process.env.URL + '/login'],
-//         response_types: ['code'],
-//         access_type: 'offline',
-//     });
-
-//     code_verifier =
-//         new Date().toISOString().split('T')[0] +
-//         'XMeoRpeQvLPLCzjovwbr4ccqKBKV8Tq80ZXLpP8zFkOM96zWo8oCy1IUSFq8mV7blG0JG3aEeWlSpfi2m5s7Zwma7fLnqUIiqGJZ';
-
-//     const code_challenge = generators.codeChallenge(code_verifier);
-
-//     authorizationUrl = client.authorizationUrl({
-//         scope: 'openid email profile',
-//         code_challenge,
-//         code_challenge_method: 'S256',
-//         prompt: 'consent',
-//     });
-// })();
 
 app.use(express.static('build'));
 
-app.post('/api/session', async function (req, res) {
-    const params = client.callbackParams(req);
-
-    console.time('client.callback');
-    const tokenSet = await client.callback(
-        'https://' + process.env.URL + '/login',
-        params,
-        { code_verifier },
-    )
-    console.timeEnd('client.callback');
-
+// create new user
+app.post('/api/v1/user', async function (req, res) {
+    const tokenSet = true;
     if (tokenSet) {
         const now = new Date().getTime();
         const dayInMillisec = 24 * 60 * 60 * 1000;
@@ -111,12 +59,23 @@ app.post('/api/session', async function (req, res) {
             res.header('Set-Cookie', 'id_token=' + tokenSet.id_token + '; Expires=' + expire + '; ' + options);
         }
 
-        if (tokenSet.refresh_token) {
-            res.header('Set-Cookie', 'refresh_token=' + tokenSet.refresh_token + '; Expires=' + expire + '; ' + options);
+        res.json(true);
+    } else {
+        res.redirect(401, authorizationUrl);
+    }
+});
 
-            // client.refresh(tokenSet.refresh_token) // => Promise
-            // 	.then(function (tokenSet) {
-            // 	}).catch(console.error);
+// login, create new session
+app.post('/api/v1/session', async function (req, res) {
+    const tokenSet = true;
+    if (tokenSet) {
+        const now = new Date().getTime();
+        const dayInMillisec = 24 * 60 * 60 * 1000;
+        const expire = new Date(now + dayInMillisec);
+        const options = 'Secure; Path=/; HttpOnly';
+
+        if (tokenSet.id_token) {
+            res.header('Set-Cookie', 'id_token=' + tokenSet.id_token + '; Expires=' + expire + '; ' + options);
         }
 
         res.json(true);
@@ -125,42 +84,10 @@ app.post('/api/session', async function (req, res) {
     }
 });
 
-// console.log('apo');
+// logout
+app.delete('/api/v1/session', auth, async function (req, res) {
 
-app.get('/api', async function (req, res) {
-    console.log('api');
-    res.json('jsonsao');
 });
-
-app.post('/api/logout', auth, async function (req, res) {
-    const options = {
-        protocol: 'https:',
-        host: 'accounts.google.com',
-        path: '/o/oauth2/revoke?token=' + req.cookies.id_token,
-    };
-
-    const googleReq = https.get(options, function (googleRes) {
-        const bodyChunks = [];
-        googleRes.on('data', function (chunk) {
-            bodyChunks.push(chunk);
-        }).on('end', function () {
-            const body = Buffer.concat(bodyChunks);
-
-            res.redirect(200, authorizationUrl);
-        })
-    });
-
-    googleReq.on('error', function (e) {
-        res.redirect(401, authorizationUrl);
-    });
-});
-
-// //////////
-// all
-// //////////
-// app.get('*', function (req, res) {
-//     res.sendFile(path.join(__dirname, '../build', 'index.html'));
-// });
 
 https.createServer(options, app).listen(1313);
 
@@ -264,61 +191,6 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
-async function saveSubjectList(trial, trialId) {
-    if (trial.subjectList && trial.subjectList.length) {
-        if (trial.id) {
-            await db.query(
-                'DELETE FROM "subjectsRelation" WHERE trial = $1',
-                [trial.id],
-            );
-        }
-
-        const subjectList = trial.subjectList;
-
-        const result = subjectList.map((subject, i) => {
-            return {
-                trial: trialId,
-                subject: subject.id,
-                loosingChance: trial.subjectData[i].loosingChance,
-            }
-        });
-
-        await db.insert('subjectsRelation', ['trial', 'subject', 'loosingChance'], result);
-    } else {
-        if (trial.subjectData && trial.subjectData.length) {
-            await db.update(
-                'subjectsRelation',
-                ['id', 'loosingChance'],
-                trial.subjectData,
-            );
-        }
-    }
-}
-
-async function postList(list, table) {
-    const newItems = [];
-    const changedItems = [];
-    const promises = [];
-
-    list.forEach((item) => {
-        if (item.id.toString().indexOf('temp_') > -1) {
-            newItems.push(item);
-        } else {
-            changedItems.push(item);
-        }
-    });
-
-    if (newItems.length) {
-        promises.push(db.insert(table, ['name'], newItems));
-    }
-
-    if (changedItems.length) {
-        promises.push(db.update(table, ['id', 'name'], changedItems));
-    }
-
-    await Promise.all(promises);
-}
-
 async function registerUser(claims) {
     const userId = claims.sub;
     const userList = await db.users.select(userId);
@@ -341,125 +213,5 @@ async function registerUser(claims) {
             ['id', 'name', 'email', 'imageUrl'],
             result,
         );
-    }
-}
-
-function getMonthString(date) {
-    const d = new Date(date);
-    const mo = d.getMonth();
-    const monthStrings = [
-        'Janeiro',
-        'Fevereiro',
-        'Março',
-        'Abril',
-        'Maio',
-        'Junho',
-        'Julho',
-        'Agosto',
-        'Setembro',
-        'Outubro',
-        'Novembro',
-        'Dezembro',
-    ];
-
-    return monthStrings[mo];
-}
-
-async function sendReportMail(date, client, to) {
-    const monthString = getMonthString(date);
-    const monthNumber = ('0' + (date.getMonth() + 1)).slice(-2);
-    const year = date.getFullYear();
-    const pdfData = await report.generate(client.id, false);
-    let subject = `Relatório - Locatelli - ${monthString}/${year}`;
-
-    if (!process.env.PRODUCTION) {
-        to = ['magaldi1989@gmail.com'];
-        subject = `[dev ${date.getTime()}]` + subject.toUpperCase();
-    }
-
-    sendMail(
-        'Caroline Martins <caroline.martins@llac.adv.br>',
-        to,
-        subject,
-        getMessage(monthString),
-        [
-            {
-                filename: `${monthNumber}.${year}-${urlize(client.name)}.pdf`,
-                content: pdfData,
-                contentType: 'application/pdf',
-            },
-        ],
-    );
-}
-
-function sendMail(from, to, subject, html, attachments) {
-    const bcc = [
-        'magaldi1989@gmail.com',
-    ];
-
-    if (process.env.PRODUCTION) {
-        bcc.push('maicon.galafassi@llac.adv.br');
-        bcc.push(from);
-    }
-
-    transporter.sendMail({
-        from,
-        to,
-        bcc,
-        subject,
-        html,
-        attachments,
-    },
-        (err, info) => {
-            console.info('err', err);
-            console.info(info);
-        });
-}
-
-function urlize(orig) {
-    let result = orig.replace(/ /g, '_');
-    result = result.toLowerCase();
-    return result;
-}
-
-async function sendReport() {
-    console.log('sendReport');
-
-    const now = new Date();
-    const today = now.getDate();
-
-    const clients = await db.clients.selectForReportSending(today);
-
-    if (process.env.SES_ID && process.env.SES_KEY) {
-        const to = ['magaldi1989@gmail.com'];
-        const message = [
-            `Relatórios enviados hoje (${clients.length}):`,
-        ];
-
-        clients.forEach((client) => {
-            const reportEmailList = client.reportEmailList || ['ninguém'];
-            message.push(client.name + ` (enviado para: ${reportEmailList.join(', ')})`);
-        });
-
-        if (process.env.PRODUCTION) {
-            to.push('maicon.galafassi@llac.adv.br');
-        }
-
-        sendMail(
-            'magaldi1989@gmail.com',
-            to,
-            `[Portal Locatelli] Rotina de envio de relatórios ${now}`,
-            message.join('<br />'),
-        );
-    }
-
-    if (clients.length) {
-        if (process.env.SES_ID && process.env.SES_KEY) {
-            clients.forEach(async (client) => {
-                if (client.reportType === 'pdf' && client.reportEmailList.length) {
-                    sendReportMail(now, client, client.reportEmailList);
-                }
-            });
-        }
     }
 }
