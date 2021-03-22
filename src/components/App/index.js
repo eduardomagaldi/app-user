@@ -2,10 +2,8 @@ import './style.scss';
 // import Box from './../Box';
 import ImgGoogleSpring from './../ImgGoogleSpring';
 import Button from './../Button';
-import IconLock from '../IconLock';
-import IconEnvelope from '../IconEnvelope';
-import Field from './../Field';
-import fetch from './../../helpers/fetch';
+import FormCreate from './../FormCreate';
+
 
 // import React, { useState, useEffect } from 'react';
 
@@ -14,16 +12,6 @@ export default function Component() {
 	// 	// Update the document title using the browser API
 	// 	// document.title = `You clicked ${count} times`;
 	// });
-
-	async function submitCreateAccount(e) {
-		e.preventDefault();
-		console.log('submit');
-
-		console.log('fetch', fetch);
-
-		const data = await fetch.post('/api/v1/user');
-		console.log('data', data);
-	}
 
 	function showSignup() {
 		let prism = document.querySelector(".rec-prism");
@@ -80,17 +68,18 @@ export default function Component() {
 	return (
 		<div className="app">
 			<ul className="nav">
-				<li onClick={showLogin}>Register (1)</li>
-				<li onClick={showSignup}>Login (2)</li>
-				<li onClick={showForgotPassword}> (3)</li>
-				<li onClick={showContactUs}>(4)</li>
-				<li onClick={showSubscribe}>Happy Spring (Top)</li>
-				<li onClick={showThankYou}>(Bottom)</li>
+				<li><button onClick={showLogin}>Register (1)</button></li>
+				<li><button onClick={showSignup}>Login (2)</button></li>
+				<li><button onClick={showForgotPassword}> (3)</button></li>
+				<li><button onClick={showContactUs}>(4)</button></li>
+				<li><button onClick={showSubscribe}>Happy Spring (Top)</button></li>
+				<li><button onClick={showThankYou}>(Bottom)</button></li>
 			</ul>
+
 			<div className="wrapper">
 				<div className="rec-prism">
 					<div className="face face-top">
-						<div className="content">
+						<div className="content text--center">
 							{/* <h2>Subscribe</h2>
 							<small>Enter your email so we can send you the latest updates!</small>
 							<form >
@@ -107,8 +96,8 @@ export default function Component() {
 
 							<ImgGoogleSpring />
 
-							<h1>Happy Spring!!!</h1>
-							<h1>Fröhlichen Frühling!!!</h1>
+							<h2>Happy Spring!!!</h2>
+							<h2>Fröhlichen Frühling!!!</h2>
 						</div>
 					</div>
 					<div className="face face-front">
@@ -116,30 +105,7 @@ export default function Component() {
 
 							<h1>Create an Account</h1>
 
-							<form onSubmit={submitCreateAccount}>
-								<Field>
-									<input className="input" type="text" />
-									<div className="icon">
-										<IconEnvelope className="mr-2" />
-									</div>
-								</Field>
-
-								<Field>
-									<input className="input" type="text" />
-									<div className="icon">
-										<IconEnvelope className="mr-2" />
-									</div>
-								</Field>
-
-								<Field>
-									<input className="input" type="text" />
-									<div className="icon">
-										<IconLock className="mr-2" />
-									</div>
-								</Field>
-
-								<Button className="button--filled button--block" type="submit">REGISTER</Button>
-							</form>
+							<FormCreate />
 
 							<div className="wrapper_nav">
 								<Button onClick={showSignup} className="button--nav">

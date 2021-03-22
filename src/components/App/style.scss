@@ -29,32 +29,6 @@
     justify-content: center;
 }
 
-// img {
-// 	transition: transform .3s;
-// 	transform: scale(.8);
-// }
-
-// .input:focus + img {
-// 	transform: scale(1);
-// }
-
-
-
-// .content {
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: center;
-// 	min-height: 400px;
-// }
-
-
-
-
-
-
-
-
-
 .wrapper_nav {
 	position: absolute;
 	bottom: $spacing;
@@ -77,13 +51,6 @@
 	}
 }
 
-
-
-
-
-
-
-
 // Dimensions
 $prism-height: 450px;
 $prism-length: 350px;
@@ -91,33 +58,12 @@ $prism-depth: $prism-length;
 
 $br: 3px;
 
-// Colors
-// $text-light: #fff;
-// $text-dark: #666;
-// $blue: #03a9f4;
-// $smoke: #f9f9fa;
-// $coral: #ff5751;
-// $navy-blue: #42509e;
-// $green: #18567a;
-
-// * {
-// 	box-sizing: border-box;
-// }
-
-// body{
-// 	font-family: Tahoma,Verdana,Segoe,sans-serif;
-// 	font-size: 14px;
-// 	background: #f6fffd;
-// 	padding: $spacing;
-// 	text-align: center;
-// }
 .wrapper {
 	width: $prism-length;
 	height: $prism-height;
 	margin: 60px auto;
 	perspective: 600px;
 	text-align: left;
-	// font-size: 30px;
 }
 
 .rec-prism {
@@ -129,20 +75,10 @@ $br: 3px;
 	transition: transform 0.5s ease-in;
 }
 
-// .button {
-// 	align-self: flex-end;
-//     margin-right: -43px;
-// }
-
-// .wrapper__content {
-// 	padding: 2 * $spacing;
-// }
-
 .face {
 	position: absolute;
 	width: $prism-length;
 	height: $prism-height;
-	// padding: $spacing;
 	background: white;
 	border: 3px solid $colorSecondary;
 	border-radius: 3px;
@@ -150,198 +86,67 @@ $br: 3px;
 	align-items: center;
 	justify-content: center;
 	overflow: hidden;
-
-	// .content {
-	// 	color: $text-dark;
-	// 	display: flex;
-	// 	flex-direction: column;
-	// 	width: 100%;
-
-	// 	h2 {
-	// 		// font-size: 1.2em;
-	// 		color: $green;
-	// 	}
-
-	// 	.field-wrapper {
-	// 		margin-top: $spacing*1.5;
-	// 		position: relative;
-
-	// 		label {
-	// 			position: absolute;
-	// 			pointer-events: none;
-	// 			font-size: 0.85em;
-	// 			top: 40%;
-	// 			left: 0;
-	// 			transform: translateY(-50%);
-	// 			transition: all ease-in 0.25s;
-	// 			color: lighten($text-dark, 20%);
-	// 		}
-	// 		input[type="text"], input[type="password"], input[type="submit"], textarea {
-	// 			appearance: none;
-	// 			appearance: none;
-	// 			&:focus {
-	// 				outline: none;
-	// 			}
-	// 		}
-	// 		input[type="text"], input[type="password"], textarea {
-	// 			width: 100%;
-	// 			border: none;
-	// 			background: transparent;
-	// 			line-height: 2em;
-	// 			border-bottom: 1px solid $green;
-	// 			color: $text-dark;
-
-	// 			&::input-placeholder {
-	// 				opacity: 0;
-	// 			}
-	// 			&::-moz-placeholder {
-	// 				opacity: 0;
-	// 			}
-	// 			&:-ms-input-placeholder {
-	// 				opacity: 0;
-	// 			}
-	// 			&:-moz-placeholder  {
-	// 				opacity: 0;
-	// 			}
-	// 			&:focus, &:not(:placeholder-shown) {
-	// 				+ label {
-	// 					top: -35%;
-	// 					color: $navy-blue;
-	// 				}
-	// 			}
-	// 		}
-	// 		input[type="submit"] {
-	// 			appearance: none;
-	// 			appearance: none;
-	// 			cursor: pointer;
-	// 			width: 100%;
-	// 			background: $green;
-	// 			line-height: 2em;
-	// 			color: $text-light;
-	// 			border: 1px solid $green;
-	// 			border-radius: $br;
-	// 			padding: $spacing/4;
-
-	// 			&:hover {
-	// 				opacity: 0.9;
-	// 			}
-	// 			&:active {
-	// 				transform: scale(0.96);
-	// 			}
-	// 		}
-	// 		textarea {
-	// 			resize: none;
-	// 			line-height: 1em;
-	// 			&:focus, &:not(:placeholder-shown) {
-	// 				+ label {
-	// 					top: -25%;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// .thank-you-msg {
-	// 	position: absolute;
-	// 	width: 200px;
-	// 	height: 130px;
-	// 	text-align: center;
-	// 	font-size: 2em;
-	// 	color: $green;
-	// 	left: 50%;
-	// 	top: 50%;
-	// 	transform: translate(-50%, -50%);
-
-	// 	&:after {
-	// 		position: absolute;
-	// 		content: '';
-	// 		width: 50px;
-	// 		height: 25px;
-	// 		border: 10px solid $green;
-	// 		border-right: 0;
-	// 		border-top: 0;
-	// 		left: 50%;
-	// 		top: 50%;
-	// 		transform: translate(-50%, -50%) rotate(0deg) scale(0);
-	// 		transform: translate(-50%, -50%) rotate(0deg) scale(0);
-	// 		animation: success ease-in 0.15s forwards;
-	// 		animation: success ease-in 0.15s forwards;
-	// 		animation-delay: 2.5s;
-	// 	}
-	// }
-
-
 }
 
 .face-front {
 	transform: rotateY(0deg) translateZ($prism-length/2);
 }
+
 .face-top {
 	height: $prism-depth;
 	transform: rotateX(90deg) translateZ($prism-depth/2);
 }
+
 .face-back {
 	transform: rotateY(180deg) translateZ($prism-length/2);
 }
+
 .face-right {
 	transform: rotateY(90deg) translateZ($prism-length/2);
 }
+
 .face-left {
 	transform: rotateY(-90deg) translateZ($prism-length/2);
 }
+
 .face-bottom {
 	height: $prism-depth;
 	transform: rotateX(-90deg) translateZ($prism-height - ($prism-depth/2));
 }
 
+.nav {
+	background-color: gold;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
 
-// .nav {
-// 	margin: $spacing 0;
-// 	padding: 0;
+	li {
+		margin-right: $spacing;
 
-// 	li {
-// 		display: inline-block;
-// 		list-style-type: none;
-// 		font-size: 1em;
-// 		margin: 0 $spacing/2;
-// 		color: $navy-blue;
-// 		position: relative;
-// 		cursor: pointer;
-// 		padding: 10px;
-
-// 		&:after {
-// 			content: "";
-// 			position: absolute;
-// 			bottom: 0;
-// 			left: 0;
-// 			width: 20px;
-// 			border-bottom: 1px solid $navy-blue;
-// 			transition: all ease-in 0.25s;
-// 		}
-
-// 		&:hover:after {
-// 			width: 100%;
-// 		}
-// 	}
-// }
-
-// .psw, .signup, .singin{
-// 	display: block;
-// 	margin: $spacing 0;
-// 	font-size: 0.75em;
-// 	text-align: center;
-// 	color: $navy-blue;
-// 	cursor: pointer;
-// }
-
-// small {
-// 	font-size: 0.7em;
-// }
-@keyframes success {
-	from {
-		transform: translate(-50%, -50%) rotate(0) scale(0);
-	}
-	to {
-		transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+		&:last-child {
+			margin-right: 0;
+		}
 	}
 }
+
+.content {
+	max-width: 100%;
+
+	img {
+		max-width: 100%;
+	}
+}
+
+.text--center {
+	text-align: center !important;
+}
+
+// @keyframes success {
+// 	from {
+// 		transform: translate(-50%, -50%) rotate(0) scale(0);
+// 	}
+// 	to {
+// 		transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+// 	}
+// }
