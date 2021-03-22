@@ -1,10 +1,12 @@
 import './style.scss';
+
 import IconPass from '../IconPass';
 import Field from './../Field';
 import IconFail from './../IconFail';
-import fetch from './../../helpers/fetch';
-import React, { useState } from "react";
 import Button from './../Button';
+
+import React, { useState } from 'react';
+import fetch from './../../helpers/fetch';
 
 export default function Component({ children, onSuccess }) {
 	const [dataForm, setDataForm] = useState(null);

@@ -31,6 +31,7 @@ export default function Component() {
 							<h2>Fröhlichen Frühling!!!</h2>
 						</div>
 					</div>
+
 					<div className="face face-front">
 						<div className="content">
 							<h1>Create an Account</h1>
@@ -43,12 +44,14 @@ export default function Component() {
 							</div>
 						</div>
 					</div>
+
 					<div className="face face-back">
 						<div className="content">
 							<h1 id="message_welcome">Welcome {user && user.fullname}!</h1>
 							<p>To logout click <button id="logout" onClick={logout}>here</button>.</p>
 						</div>
 					</div>
+
 					<div className="face face-right">
 						<div className="content">
 							<h1>Login</h1>
@@ -109,50 +112,50 @@ export default function Component() {
 	}
 
 	function showSignup() {
-		let prism = document.querySelector(".rec-prism");
+		let prism = document.querySelector('.rec-prism');
 
 		if (prism) {
-			prism.style.transform = "translateZ(-100px) rotateY( -90deg)";
+			prism.style.transform = 'translateZ(-100px) rotateY( -90deg)';
 		}
 	}
 
 	function showLogin() {
-		let prism = document.querySelector(".rec-prism");
+		let prism = document.querySelector('.rec-prism');
 
 		if (prism) {
-			prism.style.transform = "translateZ(-100px)";
+			prism.style.transform = 'translateZ(-100px)';
 		}
 	}
 
 	function showForgotPassword() {
-		let prism = document.querySelector(".rec-prism");
+		let prism = document.querySelector('.rec-prism');
 
 		if (prism) {
-			prism.style.transform = "translateZ(-100px) rotateY( -180deg)";
+			prism.style.transform = 'translateZ(-100px) rotateY( -180deg)';
 		}
 	}
 
 	function showSubscribe() {
-		let prism = document.querySelector(".rec-prism");
+		let prism = document.querySelector('.rec-prism');
 
 		if (prism) {
-			prism.style.transform = "translateZ(-100px) rotateX( -90deg)";
+			prism.style.transform = 'translateZ(-100px) rotateX( -90deg)';
 		}
 	}
 
 	function showContactUs() {
-		let prism = document.querySelector(".rec-prism");
+		let prism = document.querySelector('.rec-prism');
 
 		if (prism) {
-			prism.style.transform = "translateZ(-100px) rotateY( 90deg)";
+			prism.style.transform = 'translateZ(-100px) rotateY( 90deg)';
 		}
 	}
 
 	function showThankYou() {
-		let prism = document.querySelector(".rec-prism");
+		let prism = document.querySelector('.rec-prism');
 
 		if (prism) {
-			prism.style.transform = "translateZ(-100px) rotateX( 90deg)";
+			prism.style.transform = 'translateZ(-100px) rotateX( 90deg)';
 		}
 	}
 }
