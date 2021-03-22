@@ -8,17 +8,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-// const NodeRSA = require('node-rsa');
-// const Crypto = require('crypto');
-// const report = require('./report');
-// const nodemailer = require('nodemailer');
-// const aws = require('aws-sdk');
-// const CronJob = require('cron').CronJob;
-// const log = require('./log');
-
-// custom.setHttpOptionsDefaults({
-// 	timeout: 100 * 1000,
-// });
 
 let options = {
     key: fs.readFileSync(path.join(__dirname, '../certificates', 'RootCA.key')),
@@ -51,8 +40,6 @@ app.post('/api/v1/user', async function (req, res) {
     // TODO some validation/sanitization for security resons
     const dataUser = { ...req.body };
 
-    res.json(dataUser);
-
     const result = await db.insert(
         'users',
         Object.keys(dataUser),
@@ -63,7 +50,7 @@ app.post('/api/v1/user', async function (req, res) {
         if (result.error) {
             res.json(result.error);
         } else {
-            res.json(result);
+            login(result, res);
         }
     } else {
         //TO DO validation/error handling
@@ -72,25 +59,12 @@ app.post('/api/v1/user', async function (req, res) {
 
 // login, create new session
 app.post('/api/v1/session', async function (req, res) {
-    const tokenSet = true;
-    if (tokenSet) {
-        const now = new Date().getTime();
-        const dayInMillisec = 24 * 60 * 60 * 1000;
-        const expire = new Date(now + dayInMillisec);
-        const options = 'Secure; Path=/; HttpOnly';
-
-        if (tokenSet.id_token) {
-            res.header('Set-Cookie', 'id_token=' + tokenSet.id_token + '; Expires=' + expire + '; ' + options);
-        }
-
-        res.json(true);
-    } else {
-        res.redirect(401, authorizationUrl);
-    }
+    login(req.body, res);
 });
 
 // logout
 app.delete('/api/v1/session', auth, async function (req, res) {
+    //TO DO delete session from database
     res.json(true);
 });
 
@@ -102,121 +76,86 @@ async function auth(req, res, next) {
         return;
     }
 
-    const valid = await isTokenValid(req.cookies.id_token);
-
-    if (!valid) {
-        res.redirect(401, authorizationUrl);
-        return;
+    if (req.cookies.id_token === '$9gF5ZBptpNBaVBp0!EhvO9&5gg#DizG%#UEKoaqs3DqdpYRpZ') {
+        next();
     }
-
-    const claims = parseJwt(req.cookies.id_token);
-
-    if (claims.iss !== 'https://accounts.google.com' && claims.iss !== 'accounts.google.com') {
-        res.redirect(401, authorizationUrl);
-        return;
-    }
-
-    if (claims.aud !== process.env.GOOGLE_CLIENT_ID) {
-        res.redirect(401, authorizationUrl);
-        return;
-    }
-
-    if (new Date() > new Date(claims.exp * 1000)) {
-        res.redirect(401, authorizationUrl);
-        return;
-    }
-
-    if (claims.hd !== 'llac.adv.br') {
-        res.redirect(401, authorizationUrl);
-        return;
-    }
-
-    registerUser(claims);
-    next();
 }
 
-function decodeAndJsonParse(base64) {
-    const json = Buffer.from(base64, 'base64').toString('ascii');
-    return JSON.parse(json);
-}
+async function login(data, res) {
+    const result = await db.users.get(data.email, data.password);
+    // TO DO make hash of password
 
-async function isTokenValid(jwt) {
-    const [rawHead, rawBody, signature] = jwt.split('.');
+    if (result) {
+        const now = new Date().getTime();
+        const dayInMillisec = 24 * 60 * 60 * 1000;
+        const expire = new Date(now + dayInMillisec);
+        const options = 'Secure; Path=/; HttpOnly';
+        const token = '$9gF5ZBptpNBaVBp0!EhvO9&5gg#DizG%#UEKoaqs3DqdpYRpZ';
+        // TODO generate a signed JWT
 
-    const parsedHead = decodeAndJsonParse(rawHead);
+        // TO DO create session on the database const session = db.sessions.create(result);
 
-    if (parsedHead.alg !== 'RS256') {
-        return false;
-    }
-
-    console.time('PUB_KEY');
-    const keystore = await googleIssuer.keystore(false);
-    console.timeEnd('PUB_KEY');
-
-    const allKeys = keystore.all();
-
-    const jwk = allKeys.find((key) => key.kid === parsedHead.kid);
-
-    if (!jwk) {
-        return false;
-    }
-
-    if (jwk.alg !== 'RS256') {
-        return false;
-    }
-
-    const key = new NodeRSA();
-    key.importKey(
-        {
-            n: Buffer.from(jwk.n, 'base64'),
-            e: Buffer.from(jwk.e, 'base64'),
-        },
-        'components-public',
-    );
-
-    const pem = key.exportKey('pkcs8-public-pem');
-
-    const verifyObject = Crypto.createVerify('RSA-SHA256');
-    verifyObject.write(rawHead + '.' + rawBody);
-    verifyObject.end();
-
-    const decodedSignature = Buffer.from(signature, 'base64').toString('base64');
-    const signatureIsValid = verifyObject.verify(pem, decodedSignature, 'base64');
-
-    return signatureIsValid;
-}
-
-function parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(Buffer.from(base64, 'base64').toString().split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}
-
-async function registerUser(claims) {
-    const userId = claims.sub;
-    const userList = await db.users.select(userId);
-    const result = [{
-        id: userId,
-        name: claims.name,
-        email: claims.email,
-        imageUrl: claims.picture,
-    }];
-
-    if (userList && userList.length) {
-        await db.update(
-            'users',
-            ['id', 'name', 'email', 'imageUrl'],
-            result,
-        );
+        res.header('Set-Cookie', 'id_token=' + token + '; Expires=' + expire + '; ' + options);
+        res.json(result);
     } else {
-        await db.insert(
-            'users',
-            ['id', 'name', 'email', 'imageUrl'],
-            result,
-        );
+        res.send(401);
     }
 }
+
+// more of my code
+
+// async function isTokenValid(jwt) {
+//     const [rawHead, rawBody, signature] = jwt.split('.');
+
+//     const parsedHead = decodeAndJsonParse(rawHead);
+
+//     if (parsedHead.alg !== 'RS256') {
+//         return false;
+//     }
+
+//     console.time('PUB_KEY');
+//     const keystore = await googleIssuer.keystore(false);
+//     console.timeEnd('PUB_KEY');
+
+//     const allKeys = keystore.all();
+
+//     const jwk = allKeys.find((key) => key.kid === parsedHead.kid);
+
+//     if (!jwk) {
+//         return false;
+//     }
+
+//     if (jwk.alg !== 'RS256') {
+//         return false;
+//     }
+
+//     const key = new NodeRSA();
+//     key.importKey(
+//         {
+//             n: Buffer.from(jwk.n, 'base64'),
+//             e: Buffer.from(jwk.e, 'base64'),
+//         },
+//         'components-public',
+//     );
+
+//     const pem = key.exportKey('pkcs8-public-pem');
+
+//     const verifyObject = Crypto.createVerify('RSA-SHA256');
+//     verifyObject.write(rawHead + '.' + rawBody);
+//     verifyObject.end();
+
+//     const decodedSignature = Buffer.from(signature, 'base64').toString('base64');
+//     const signatureIsValid = verifyObject.verify(pem, decodedSignature, 'base64');
+
+//     return signatureIsValid;
+// }
+
+// function parseJwt(token) {
+//     const base64Url = token.split('.')[1];
+//     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+//     const jsonPayload = decodeURIComponent(Buffer.from(base64, 'base64').toString().split('').map(function (c) {
+//         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+//     }).join(''));
+
+//     return JSON.parse(jsonPayload);
+// }

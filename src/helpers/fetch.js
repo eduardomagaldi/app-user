@@ -70,11 +70,13 @@ function handleErrors(response) {
         }
     }
 
+    console.log('response', response, response.status);
+
     if (response.status !== 200) {
         console.error('Looks like there was a problem. Status Code: ' + response.status);
+    } else {
+        return error;
     }
-
-    return error;
 }
 
 function getOptions(): object {

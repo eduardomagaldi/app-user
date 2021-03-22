@@ -1,0 +1,15 @@
+.list_requirements {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	li {
+		display: flex;
+		align-items: center;
+	}
+}
+
+.wrapper_inner__field {
+	display: flex;
+	flex-direction: row-reverse;
+}

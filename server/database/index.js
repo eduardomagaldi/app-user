@@ -14,29 +14,34 @@ const db = {
 module.exports = {
     ...db,
     users: {
-        selectList: [
-            'selectAll()',
-            'select(1234123421)',
-        ],
-        selectAll: async function () {
-            return await db.query(
-                `SELECT *
-				FROM users
-				WHERE deleted = false
-				ORDER BY "name" ASC`,
-            );
+        get: async function (email, password) {
+            const data = getDatabase();
+            const found = data.users.find((user) => {
+                if (user.email === email && user.password === password) {
+                    return user;
+                }
+            })
+            return found;
         },
-        select: async function (id) {
-            return await db.query(
-                `SELECT *
-				FROM users
-				WHERE deleted = false AND id = $1
-				ORDER BY "name" ASC`,
-                [id],
-            );
+    },
+    sessions: {
+        get: async function (email, password) {
+            const data = getDatabase();
+            const found = data.users.find((user) => {
+                if (user.email === email && user.password === password) {
+                    return user;
+                }
+            })
+            return found;
         },
     },
 };
+
+function getDatabase() {
+    let rawdata = fs.readFileSync(directoryPath + '/../db.json');
+    let data = JSON.parse(rawdata);
+    return data;
+}
 
 async function query(query, values) {
     const verbose = false;
@@ -60,9 +65,7 @@ async function query(query, values) {
 }
 
 async function insert(table, columns, valuesObjArray) {
-    let rawdata = fs.readFileSync(directoryPath + '/../db.json');
-    let data = JSON.parse(rawdata);
-    console.log(data);
+    const data = getDatabase();
 
     //TODO make a hash out of the password
 
@@ -71,6 +74,8 @@ async function insert(table, columns, valuesObjArray) {
     });
 
     fs.writeFileSync(directoryPath + '/../db.json', JSON.stringify(data));
+
+    return true;
 
     // more of my code:
 

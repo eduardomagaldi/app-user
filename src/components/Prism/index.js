@@ -1,9 +1,10 @@
 import './style.scss';
 // import Box from './../Box';
-import ImgGoogleSpring from './../ImgGoogleSpring';
-import Button from './../Button';
-import FormCreate from './../FormCreate';
-
+import ImgGoogleSpring from '../ImgGoogleSpring';
+import Button from '../Button';
+import FormCreate from '../FormCreate';
+import FormLogin from '../FormLogin';
+import fetch from '../../helpers/fetch';
 
 import React, { useState } from 'react';
 
@@ -25,20 +26,6 @@ export default function Component() {
 				<div className="rec-prism">
 					<div className="face face-top">
 						<div className="content text--center">
-							{/* <h2>Subscribe</h2>
-							<small>Enter your email so we can send you the latest updates!</small>
-							<form >
-
-
-								<div className="field-wrapper">
-									<input type="text" name="email" placeholder="email" />
-									<label>e-mail</label>
-								</div>
-								<div className="field-wrapper">
-									<input type="submit" onClick={showThankYou} />
-								</div>
-							</form> */}
-
 							<ImgGoogleSpring />
 
 							<h2>Happy Spring!!!</h2>
@@ -47,9 +34,7 @@ export default function Component() {
 					</div>
 					<div className="face face-front">
 						<div className="content">
-
 							<h1>Create an Account</h1>
-
 							<FormCreate onSuccess={onSuccess} />
 
 							<div className="wrapper_nav">
@@ -61,12 +46,14 @@ export default function Component() {
 					</div>
 					<div className="face face-back">
 						<div className="content">
-							<p>Welcome {user.fullname}! To logout click <button onClick={logout}>here</button>.</p>
+							<h1>Welcome {user && user.fullname}!</h1>
+							<p>To logout click <button onClick={logout}>here</button>.</p>
 						</div>
 					</div>
 					<div className="face face-right">
 						<div className="content">
-							2
+							<h1>Login</h1>
+							<FormLogin onSuccess={onSuccess} />
 
 							<div className="wrapper_nav wrapper_nav--left">
 								<Button className="button--block" onClick={showLogin}>
@@ -77,36 +64,15 @@ export default function Component() {
 					</div>
 					<div className="face face-left">
 						<div className="content">
-							{/* <h2>Contact us</h2>
-							<form onSubmit={submit}>
-								<div className="field-wrapper">
-									<input type="text" name="name" placeholder="name" />
-									<label>Name</label>
-								</div>
-								<div className="field-wrapper">
-									<input type="text" name="email" placeholder="email" />
-									<label>e-mail</label>
-								</div>
-								<div className="field-wrapper">
-									<textarea placeholder="your message"></textarea>
-									<label>your message</label>
-								</div>
-								<div className="field-wrapper">
-									<input type="submit" onClick={showThankYou} />
-								</div>
-							</form> */}
-
 							4
 						</div>
 					</div>
 					<div className="face face-bottom">
-						bottom
-
-						{/* <div className="content">
+						<div className="content">
 							<div className="thank-you-msg">
-								Thank you!
-                				</div>
-						</div> */}
+								Thank you! You've logged out successfuly. Have a nice day! :-)
+                			</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -115,8 +81,10 @@ export default function Component() {
 
 	async function logout() {
 		const data = await fetch.delete('/api/v1/session', user);
-		console.log('data', data);
-		onSuccess(data);
+
+		if (data && !data.error) {
+			showThankYou();
+		}
 	}
 
 	function onSuccess(user) {
