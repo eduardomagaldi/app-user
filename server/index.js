@@ -17,21 +17,22 @@ let options = {
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+const port = '1313';
+
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: `https://localhost:${port}`,
         credentials: true,
         exposedHeaders: 'Location',
         optionsSuccessStatus: 200,
     }),
 );
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Origin', `https://localhost:${port}`);
     res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     next();
 });
-
-let authorizationUrl = '/auth';
 
 app.use(express.static('build'));
 
@@ -50,7 +51,7 @@ app.post('/api/v1/user', async function (req, res) {
         if (result.error) {
             res.json(result.error);
         } else {
-            login(result, res);
+            login(dataUser, res);
         }
     } else {
         //TO DO validation/error handling
@@ -72,7 +73,7 @@ https.createServer(options, app).listen(1313);
 
 async function auth(req, res, next) {
     if (!req.cookies.id_token) {
-        res.redirect(401, authorizationUrl);
+        res.sendStatus(401);
         return;
     }
 
@@ -98,7 +99,7 @@ async function login(data, res) {
         res.header('Set-Cookie', 'id_token=' + token + '; Expires=' + expire + '; ' + options);
         res.json(result);
     } else {
-        res.send(401);
+        res.sendStatus(401);
     }
 }
 

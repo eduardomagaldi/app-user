@@ -49,6 +49,7 @@ export default function Component({ children, onSuccess }) {
 						className="input"
 						type="text"
 						name="fullname"
+						id="create_fullname"
 						onChange={handleChange}
 						placeholder="Full Name"
 					/>
@@ -62,6 +63,7 @@ export default function Component({ children, onSuccess }) {
 					<input
 						className="input"
 						type="email"
+						id="create_email"
 						name="email"
 						onChange={handleChange}
 						placeholder="Email"
@@ -77,6 +79,7 @@ export default function Component({ children, onSuccess }) {
 						className="input"
 						type="password"
 						name="password"
+						id="create_password"
 						onChange={handleChange}
 						placeholder="Password"
 					/>
@@ -91,6 +94,7 @@ export default function Component({ children, onSuccess }) {
 						className="input"
 						type="password"
 						name="passwordRepeat"
+						id="create_passwordRepeat"
 						onChange={handleChange}
 						placeholder="Repeat Password"
 					/>
@@ -105,7 +109,7 @@ export default function Component({ children, onSuccess }) {
 				<li><IconFail /> At least one characters</li>
 			</ul>
 
-			<Button className="button--filled button--block" type="submit">REGISTER</Button>
+			<Button className="button--filled button--block" type="submit" id="register">REGISTER</Button>
 		</form>
 	);
 }

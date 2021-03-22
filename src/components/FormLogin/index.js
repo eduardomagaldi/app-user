@@ -48,6 +48,7 @@ export default function Component({ children, onSuccess }) {
 					<input
 						className="input"
 						type="email"
+						id="login_email"
 						name="email"
 						onChange={handleChange}
 						placeholder="Email"
@@ -61,6 +62,7 @@ export default function Component({ children, onSuccess }) {
 				<div className="wrapper_inner__field">
 					<input
 						className="input"
+						id="login_password"
 						type="password"
 						name="password"
 						onChange={handleChange}
@@ -71,7 +73,7 @@ export default function Component({ children, onSuccess }) {
 				{error && error.password && <small className="error">{error.password}</small>}
 			</Field>
 
-			<Button className="button--filled button--block" type="submit">LOGIN</Button>
+			<Button className="button--filled button--block" type="submit" id="login">LOGIN</Button>
 		</form>
 	);
 }

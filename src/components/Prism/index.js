@@ -14,7 +14,7 @@ export default function Component() {
 		<div className="app">
 			<ul className="nav">
 				<li><button onClick={showLogin}>Register (1)</button></li>
-				<li><button onClick={showSignup}>Login (2)</button></li>
+				<li><button id="nav_login" onClick={showSignup}>Login (2)</button></li>
 				<li><button onClick={showForgotPassword}> (3)</button></li>
 				<li><button onClick={showContactUs}>(4)</button></li>
 				<li><button onClick={showSubscribe}>Happy Spring (Top)</button></li>
@@ -45,8 +45,8 @@ export default function Component() {
 					</div>
 					<div className="face face-back">
 						<div className="content">
-							<h1>Welcome {user && user.fullname}!</h1>
-							<p>To logout click <button onClick={logout}>here</button>.</p>
+							<h1 id="message_welcome">Welcome {user && user.fullname}!</h1>
+							<p>To logout click <button id="logout" onClick={logout}>here</button>.</p>
 						</div>
 					</div>
 					<div className="face face-right">
@@ -98,6 +98,7 @@ export default function Component() {
 		const data = await fetch.delete('/api/v1/session', user);
 
 		if (data && !data.error) {
+			setUser(null);
 			showThankYou();
 		}
 	}
