@@ -64,7 +64,7 @@ export default function Component() {
 					</div>
 					<div className="face face-left">
 						<div className="content">
-							4
+							<iframe width="270" src="https://www.youtube.com/embed/hFZFjoX2cGg" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
 						</div>
 					</div>
 					<div className="face face-bottom">
