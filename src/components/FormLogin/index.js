@@ -1,16 +1,12 @@
 import './style.scss';
 import Field from './../Field';
 import fetch from './../../helpers/fetch';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from './../Button';
 
 export default function Component({ children, onSuccess }) {
 	const [dataForm, setDataForm] = useState(null);
 	const [error, setError] = useState(null);
-
-	useEffect(() => {
-		console.log('use effect');
-	});
 
 	async function submitLogin(e) {
 		e.preventDefault();
@@ -19,11 +15,9 @@ export default function Component({ children, onSuccess }) {
 
 		if (result === true) {
 			const data = await fetch.post('/api/v1/session', dataForm);
-			console.log('data', data);
 			if (data && !data.error) {
 				onSuccess(data);
 			}
-
 		}
 	}
 

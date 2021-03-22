@@ -70,8 +70,6 @@ function handleErrors(response) {
         }
     }
 
-    console.log('response', response, response.status);
-
     if (response.status !== 200) {
         console.error('Looks like there was a problem. Status Code: ' + response.status);
     } else {
@@ -79,7 +77,7 @@ function handleErrors(response) {
     }
 }
 
-function getOptions(): object {
+function getOptions() {
     return {
         headers: {
             'Accept': 'application/json',

@@ -3,16 +3,12 @@ import IconPass from '../IconPass';
 import Field from './../Field';
 import IconFail from './../IconFail';
 import fetch from './../../helpers/fetch';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from './../Button';
 
 export default function Component({ children, onSuccess }) {
 	const [dataForm, setDataForm] = useState(null);
 	const [error, setError] = useState(null);
-
-	useEffect(() => {
-		console.log('use effect');
-	});
 
 	async function submitCreateAccount(e) {
 		e.preventDefault();
@@ -21,7 +17,6 @@ export default function Component({ children, onSuccess }) {
 
 		if (result === true) {
 			const data = await fetch.post('/api/v1/user', dataForm);
-			console.log('data', data);
 			onSuccess(data);
 		}
 	}

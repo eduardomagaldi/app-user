@@ -1,5 +1,4 @@
 import './style.scss';
-// import Box from './../Box';
 import ImgGoogleSpring from '../ImgGoogleSpring';
 import Button from '../Button';
 import FormCreate from '../FormCreate';
@@ -57,21 +56,37 @@ export default function Component() {
 
 							<div className="wrapper_nav wrapper_nav--left">
 								<Button className="button--block" onClick={showLogin}>
-									REGISTER.....
+									REGISTER
 								</Button>
 							</div>
 						</div>
 					</div>
+
 					<div className="face face-left">
 						<div className="content">
-							<iframe width="270" src="https://www.youtube.com/embed/hFZFjoX2cGg" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+							<iframe
+								width="270"
+								src="https://www.youtube.com/embed/hFZFjoX2cGg"
+								title="YouTube video player"
+								frameBorder="0"
+								allow="accelerometer;
+									autoplay;
+								clipboard-write;
+								encrypted-media;
+								gyroscope;
+								picture-in-picture"
+								allowFullScreen></iframe>
 						</div>
 					</div>
-					<div className="face face-bottom">
+
+					<div
+						className="face face-bottom">
 						<div className="content">
 							<div className="thank-you-msg">
-								Thank you! You've logged out successfuly. Have a nice day! :-)
-                			</div>
+								<p>Thank you! You've logged out successfuly. Have a nice day! :-)</p>
+
+								<a rel="noopener" targe="_blank" href="https://codepen.io/nourabusoud/pen/BxJbjJ">Inspiration</a>
+							</div>
 						</div>
 					</div>
 				</div>
